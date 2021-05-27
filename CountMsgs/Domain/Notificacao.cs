@@ -6,7 +6,6 @@ namespace CountMsgs.Notificadores
     {
         public int Registros { get; set; }
         public int TipoAlerta { get; set; }
-        public bool VerificaHora { get; set; }
 
 
         public int GrauAlerta()

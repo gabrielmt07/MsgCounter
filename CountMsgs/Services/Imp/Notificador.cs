@@ -26,20 +26,13 @@ namespace CountMsgs.Services.Imp
                     if (result.Read())
                     {
                         notificacao.Registros = int.Parse(result["contador"].ToString());
-                        notificacao.TipoAlerta = 0;
+                        notificacao.TipoAlerta = notificacao.GrauAlerta();
                     }
                     else
                         notificacao.TipoAlerta = 0;
                 }
             }
             return notificacao.EnviarAlerta();
-
-            //notificacao.VerificaHora = notificacao.VerificaHorario(DateTime.Now);
-            //if (notificacao.VerificaHora)
-            //{
-            //    return notificacao.EnviarAlerta();
-            //}
-            //return "SISTEMA EM OFF! FORA DO HORÁRIO COMERCIAL!";
         }
     }
 }
