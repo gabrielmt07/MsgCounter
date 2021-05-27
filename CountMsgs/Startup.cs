@@ -1,4 +1,6 @@
 using CountMsgs.Data;
+using CountMsgs.Services;
+using CountMsgs.Services.Imp;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,6 +30,8 @@ namespace CountMsgs
             {
                 options.UseSqlServer(@"Server=.\SQLEXPRESS;Database=master;Trusted_Connection=True;");
             });
+
+            services.AddScoped<INotificador, CountMsgs.Services.Imp.Notificador>();
 
             services.AddControllers();
             services.AddSwaggerGen(c =>

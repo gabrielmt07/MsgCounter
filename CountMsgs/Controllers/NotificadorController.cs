@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CountMsgs.Notificadores;
 using System;
+using CountMsgs.Services;
 
 namespace Notificador.Controllers
 {
@@ -11,39 +12,17 @@ namespace Notificador.Controllers
     [ApiController]
     public class NotificadorController : ControllerBase
     {
-        private readonly MainContext _db;
+        private readonly INotificador _notificador;
 
-        public NotificadorController(MainContext db)
+        public NotificadorController(INotificador notificador)
         {
-            _db = db;
+            _notificador = notificador;
         }
 
         [HttpGet]
         public string Get(int segundos)
         {
-            Notificacao notificacao = new Notificacao();
-            using (var command = _db.Database.GetDbConnection().CreateCommand())
-            {
-                command.CommandText = $"SELECT COUNT(*) as contador FROM Envio WHERE Data >= DATEADD(SECOND, {-segundos}, GETDATE())";
-                _db.Database.OpenConnection();
-                using (var result = command.ExecuteReader())
-                {
-                    if(result.Read())
-                    {
-                        //notificacao.Registros = int.Parse(result["contador"].ToString());
-                        //notificacao.TipoAlerta = notificacao.GrauAlerta();
-                    }      
-                    notificacao.TipoAlerta = 0;                  
-                }
-            }
-
-            //notificacao.VerificaHora = notificacao.VerificaHorario(DateTime.Now);
-            notificacao.VerificaHora = notificacao.VerificaHorario(new DateTime(2019,11,19,19,00,00));
-            if (notificacao.VerificaHora)
-            {
-                return notificacao.EnviarAlerta();
-            }
-            return "SISTEMA EM OFF! FORA DO HORÁRIO COMERCIAL!";
+            return _notificador.Notifica(segundos);
         }
     }
 }
